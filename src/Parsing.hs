@@ -95,7 +95,9 @@ basicExp = letrecExp
 -- List [CX (Var {getVar = "a"}),CX (Var {getVar = "b"}),CX (Var {getVar = "c"})]
 
 expr :: Parser ComplexExp
-expr = varExp
+expr = do
+    es <- some (basicExp)
+    return $ foldl1 CApp es
 -- >>> testParse expr "\\x -> [x,y,z]"
 -- CLam (Var {getVar = "x"}) (List [CX (Var {getVar = "x"}),CX (Var {getVar = "y"}),CX (Var {getVar = "z"})])
 
