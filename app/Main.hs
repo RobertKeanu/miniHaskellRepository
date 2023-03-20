@@ -6,6 +6,8 @@ import System.Console.Isocline
 import Exp
 import Parsing
 import Printing
+import Eval
+import Sugar
 import REPLCommand
 
 main :: IO ()
