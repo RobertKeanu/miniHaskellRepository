@@ -50,7 +50,16 @@ desugarExp (LetRec v c1 c2) = App (Lam (desugarVar v) (desugarExp c2)) (App fixE
 -- App (Lam (IndexedVar {ivName = "y", ivCount = 0}) (X (IndexedVar {ivName = "z", ivCount = 0}))) (App (X (IndexedVar {ivName = "fix", ivCount = 0})) (Lam (IndexedVar {ivName = "y", ivCount = 0}) (X (IndexedVar {ivName = "x", ivCount = 0}))))
 
 sugarExp :: Exp -> ComplexExp
-sugarExp = undefined
+sugarExp e = case e of
+    X iv -> let cv = sugarVar iv in CX cv
+    Lam iv e ->
+        let v = sugarVar iv
+            ce = sugarExp e
+        in CLam v ce
+    App e1 e2 -> 
+        let ce1 = sugarExp e1
+            ce2 = sugarExp e2
+        in CApp ce1 ce2
 
 -- >>> sugarExp (App (X (IndexedVar "x" 0)) (X (IndexedVar "y" 1)))
 -- CApp (CX (Var {getVar = "x"})) (CX (Var {getVar = "y_1"}))
