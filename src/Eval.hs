@@ -4,7 +4,7 @@ import Exp
 import Data.List ( union, delete )
 
 vars :: Exp -> [IndexedVar]
-vars = undefined
+vars (Lam v c) = 
 
 -- >>> vars (Lam (makeIndexedVar "x") (X (makeIndexedVar "y")))
 -- [IndexedVar {ivName = "x", ivCount = 0},IndexedVar {ivName = "y", ivCount = 0}]
@@ -16,7 +16,7 @@ vars = undefined
 -- [IndexedVar {ivName = "x", ivCount = 0}]
 
 freeVars :: Exp -> [IndexedVar]
-freeVars = undefined
+freeVars = 
 
 -- >>> freeVars (Lam (makeIndexedVar "x") (X (makeIndexedVar "y")))
 -- [IndexedVar {ivName = "y", ivCount = 0}]
