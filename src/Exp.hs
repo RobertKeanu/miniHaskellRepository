@@ -16,6 +16,7 @@ data ComplexExp                         --  ComplexExp ::= "(" ComplexExp ")"
   | List [ComplexExp]                   --          |   "[" {ComplexExp ","}* "]"
   deriving (Show)
 
+
 data IndexedVar = IndexedVar
   { ivName :: String
   , ivCount :: Int
@@ -29,3 +30,4 @@ data Exp
   | Lam IndexedVar Exp
   | App Exp Exp
   deriving (Show)
+
