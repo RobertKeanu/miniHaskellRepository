@@ -1,10 +1,9 @@
-
 module Sugar where
 
 import Exp
 
 desugarVar :: Var -> IndexedVar
-desugarVar nume = makeIndexedVar (getVar nume) 
+desugarVar = makeIndexedVar . getVar
 
 -- >>> desugarVar (Var "x")
 -- IndexedVar {ivName = "x", ivCount = 0}
@@ -15,7 +14,7 @@ sugarVar iv = Var ((ivName iv) ++ if ivCount iv == 0 then "" else "_" ++ show (i
 -- >>> sugarVar (IndexedVar "x" 0)
 -- Var {getVar = "x"}
 
--- >>> sugarVar (IndexedVar "x" 3)`
+-- >>> sugarVar (IndexedVar "x" 3)
 -- Var {getVar = "x_3"}
 
 consExp, nilExp, zeroExp, succExp, fixExp :: Exp
@@ -50,20 +49,12 @@ desugarExp (LetRec v c1 c2) = App (Lam (desugarVar v) (desugarExp c2)) (App fixE
 -- App (Lam (IndexedVar {ivName = "y", ivCount = 0}) (X (IndexedVar {ivName = "z", ivCount = 0}))) (App (X (IndexedVar {ivName = "fix", ivCount = 0})) (Lam (IndexedVar {ivName = "y", ivCount = 0}) (X (IndexedVar {ivName = "x", ivCount = 0}))))
 
 sugarExp :: Exp -> ComplexExp
-sugarExp e = case e of
-    X iv -> let cv = sugarVar iv in CX cv
-    Lam iv e ->
-        let v = sugarVar iv
-            ce = sugarExp e
-        in CLam v ce
-    App e1 e2 -> 
-        let ce1 = sugarExp e1
-            ce2 = sugarExp e2
-        in CApp ce1 ce2
+sugarExp (X v) = CX (sugarVar v)
+sugarExp (Lam v c) = CLam (sugarVar v) (sugarExp c)
+sugarExp (App c1 c2) = CApp (sugarExp c1) (sugarExp c2)
 
 -- >>> sugarExp (App (X (IndexedVar "x" 0)) (X (IndexedVar "y" 1)))
 -- CApp (CX (Var {getVar = "x"})) (CX (Var {getVar = "y_1"}))
 
 -- >>> sugarExp (App (Lam (IndexedVar {ivName = "x", ivCount = 0}) (X (IndexedVar {ivName = "y", ivCount = 0}))) (X (IndexedVar {ivName = "z", ivCount = 0})))
 -- (CApp (CLam (Var "x") (CX (Var "y"))) (CX (Var "z"))) 
-

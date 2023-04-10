@@ -34,12 +34,12 @@ varExp = CX <$> var
 -- CX (Var {getVar = "b"})
 
 lambdaExp :: Parser ComplexExp
-lambdaExp = do 
-    reservedOp miniHs "\\"
-    v <- varExp
-    reservedOp miniHs "->"
-    cex <- expr 
-    return $ CLam v cex
+lambdaExp = do
+   reservedOp miniHs "\\"
+   v <- var
+   reservedOp miniHs "->"
+   cex <- expr
+   return (CLam v cex)
 -- >>> testParse lambdaExp "\\x -> x"
 -- CLam (Var {getVar = "x"}) (CX (Var {getVar = "x"}))
 

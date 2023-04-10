@@ -5,11 +5,11 @@ import Exp
 import Data.List (intercalate)
 
 showVar :: Var -> String
-showVar = show v
+showVar x = show x
 
 showExp :: ComplexExp -> String
-showExp (Cx v) = showVar v 
-showExp (Nat x) =show n
+showExp (CX v) = showVar v 
+showExp (Nat x) =show x
 showExp (CLam v cexp) = "\\" ++ (showVar v) ++ "->" ++ (showExp cexp)
 showExp (CApp c1 c2) = "(" ++ showExp c1 ++ " " ++ showExp c2 ++ ")"
 showExp (Let v c1 c2) = "(let " ++ showVar v ++ " := " ++ showExp c1 ++ " in " ++ showExp c2  ++ ")"
