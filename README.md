@@ -1,1 +1,1 @@
-# miniHaskellRepository
+# miniHaskell
